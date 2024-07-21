@@ -1,0 +1,133 @@
+from fastapi import FastAPI, UploadFile, File
+from fastapi.responses import PlainTextResponse
+import PyPDF2
+import nltk
+from nltk.tokenize import sent_tokenize
+from io import BytesIO
+import requests
+import os
+import re
+
+
+from py_eureka_client.eureka_client import EurekaClient
+from contextlib import asynccontextmanager
+eureka_server_url = "http://172.23.16.1:8761"
+
+
+@asynccontextmanager
+async def startup(app: FastAPI):
+    client = EurekaClient(eureka_server=eureka_server_url, app_name="pdf_extractor", instance_port=8010)
+    await client.start()
+    yield
+
+app = FastAPI(lifespan=startup)
+
+# Download NLTK data if not already downloaded
+nltk.download('punkt')
+def extract_introduction(content: str) -> str:
+    # Define the heuristic map for section starts
+    section_map = {
+        "introduction": [
+            'introduction',
+            'introduction and preliminaries',
+            'background',
+            'motivation',
+        ],
+        "next_section": [
+            'methods',
+            'methodology',
+            'experiments',
+            'overview',
+            'experimental setup',
+            'numerical experiments',
+            'analysis',
+            'simulations',
+            'implementation',
+            'results',
+            'discussion',
+            'conclusion',
+            'related work'
+        ]
+    }
+
+    # Compile the regex patterns
+    intro_start_pattern = re.compile(r'\b(?:' + '|'.join(section_map["introduction"]) + r')\b', re.IGNORECASE)
+    next_section_pattern = re.compile(r'\b(?:' + '|'.join(section_map["next_section"]) + r')\b', re.IGNORECASE)
+
+    # Search for the start of the introduction
+    intro_start_match = intro_start_pattern.search(content)
+    if not intro_start_match:
+        return "Introduction section not found."
+    
+    intro_start_index = intro_start_match.end()
+
+    # Search for the start of the next section after the introduction
+    next_section_match = next_section_pattern.search(content, intro_start_index)
+    intro_end_index = next_section_match.start() if next_section_match else len(content)
+
+    # Extract the introduction content
+    introduction_content = content[intro_start_index:intro_end_index].strip()
+    
+    return introduction_content
+
+def extract_introduction1(content: str) -> str:
+    # Define the heuristic map for section starts
+    section_map = {
+        "introduction": r'\ INTRODUCTION\n\b',
+        "next_section": r'\ METHODS\n\b'
+    }
+
+    # Compile the regex patterns
+    intro_start_pattern = re.compile(section_map["introduction"])
+    next_section_pattern = re.compile(section_map["next_section"])
+
+    # Search for the start of the introduction
+    intro_start_match = intro_start_pattern.search(content)
+    if not intro_start_match:
+        return "Introduction section not found."
+    
+    intro_start_index = intro_start_match.end()
+
+    # Search for the start of the next section after the introduction
+    next_section_match = next_section_pattern.search(content, intro_start_index)
+    if not next_section_match:
+        return "Next section after introduction not found."
+    intro_end_index = next_section_match.start() if next_section_match else len(content)
+
+    # Extract the introduction content
+    introduction_content = content[intro_start_index:intro_end_index].strip()
+    
+    return introduction_content
+
+
+
+@app.post("/extract_introduction")
+async def extract_introduction_endpoint(file: UploadFile = File(...)):
+    """Extracts the introduction from an uploaded PDF file."""
+
+    contents = await file.read()
+    with open(file.filename, 'wb') as f:
+        f.write(contents)
+    
+    return await process_pdf(file.filename)
+
+
+async def process_pdf(pdf_source):
+    # Process the PDF from URL or local file
+    file =  open(pdf_source, 'rb')
+
+    # Extract text from PDF
+    pdf_reader = PyPDF2.PdfReader(file)
+    text = ""
+    for page in range(len(pdf_reader.pages)):
+        text += pdf_reader.pages[page].extract_text()
+    
+    file.close()
+
+
+    return {"status": "Processing completed","text":text,'introduction':extract_introduction(text)}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8010)
+

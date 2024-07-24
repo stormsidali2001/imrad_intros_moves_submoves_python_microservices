@@ -54,28 +54,16 @@ print("loading model")
 model = keras.models.load_model(moves_classification_model_path)
 print("loading model completed.......")
 
-@app.get("/predict/{sentences}")
-
-async def predict(sentence: str):
-
-    print("prediction started....")
-    predictions = model.predict([sentence])
-    predictions = np.argmax(predictions, axis=1)
-    print("prediction completed....")
-    print(predictions)
-
-    return {"predictions": predictions.tolist()}
 
 
 @app.post("/predict/batch")
 async def predict_batch(sentences: list[str]):
     print("prediction started....")
     predictions = model.predict(sentences)
-    predictions = np.argmax(predictions, axis=1)
-    print("prediction completed....")
+    predictions  = [{'class':int(np.argmax(x)),'probability':float(np.max(x))} for i,x in enumerate(predictions)]
     print(predictions)
 
-    return {"predictions": predictions.tolist()}
+    return predictions 
 
     
 

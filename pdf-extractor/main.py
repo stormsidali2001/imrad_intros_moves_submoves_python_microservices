@@ -28,31 +28,35 @@ def extract_introduction(content: str) -> str:
     # Define the heuristic map for section starts
     section_map = {
         "introduction": [
-            'introduction',
-            'introduction and preliminaries',
-            'background',
-            'motivation',
+            'INTRODUCTION',
+            #
         ],
         "next_section": [
-            'methods',
-            'methodology',
-            'experiments',
-            'overview',
-            'experimental setup',
-            'numerical experiments',
-            'analysis',
-            'simulations',
-            'implementation',
-            'results',
-            'discussion',
-            'conclusion',
-            'related work'
+            r'\d+\.\s*[A-Z][a-z]*',  # Matches patterns like "2. Overview" or "1. Methods"
+
+            'METHODS',
+            #
+            'METHODOLOGY',
+            #
+            'EXPERIMENTS',
+            #
+            'OVERVIEW',
+            
+            #
+            'RESULTS', 
+            #
+            'DISCUSSION',
+            #
+            'CONCLUSION',
+            #
+            'RELATED WORK'
+            #
         ]
     }
 
     # Compile the regex patterns
-    intro_start_pattern = re.compile(r'\b(?:' + '|'.join(section_map["introduction"]) + r')\b', re.IGNORECASE)
-    next_section_pattern = re.compile(r'\b(?:' + '|'.join(section_map["next_section"]) + r')\b', re.IGNORECASE)
+    intro_start_pattern = re.compile(r'\b(?:' + '|'.join(section_map["introduction"]) + r')\b')
+    next_section_pattern = re.compile(r'\b(?:' + '|'.join(section_map["next_section"]) + r')\b')
 
     # Search for the start of the introduction
     intro_start_match = intro_start_pattern.search(content)
@@ -60,10 +64,14 @@ def extract_introduction(content: str) -> str:
         return "Introduction section not found."
     
     intro_start_index = intro_start_match.end()
+    print("Start index : "+str(intro_start_index))
+    print("example "+content[intro_start_index:intro_start_index+100])
 
     # Search for the start of the next section after the introduction
     next_section_match = next_section_pattern.search(content, intro_start_index)
     intro_end_index = next_section_match.start() if next_section_match else len(content)
+
+    print("End index : "+str(intro_end_index))
 
     # Extract the introduction content
     introduction_content = content[intro_start_index:intro_end_index].strip()

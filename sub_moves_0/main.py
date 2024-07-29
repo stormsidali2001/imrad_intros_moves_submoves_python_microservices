@@ -13,7 +13,7 @@ import numpy as np
 
 from py_eureka_client.eureka_client import EurekaClient
 from contextlib import asynccontextmanager
-eureka_server_url = "http://172.23.16.1:8761"
+eureka_server_url = "http://0.0.0.0:8761"
 
 
 

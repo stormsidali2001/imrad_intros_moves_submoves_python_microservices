@@ -2,4 +2,9 @@
 !**.py
 !**.md
 !.gitignore
-!requirements.txt
+!jjrequirements.txt
+
+!moves
+!sub_moves_1
+!sub_moves_2
+!sub_moves_3

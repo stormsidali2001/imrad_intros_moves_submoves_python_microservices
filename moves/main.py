@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import tensorflow as tf
 import keras
 
-import tensorflow_text as text
+#import tensorflow_text as text
 from fastapi.encoders import jsonable_encoder
 import json
 import numpy as np
@@ -12,7 +12,8 @@ import numpy as np
 
 from py_eureka_client.eureka_client import EurekaClient
 from contextlib import asynccontextmanager
-eureka_server_url = "http://172.23.16.1:8761"
+eureka_server_url = "http://0.0.0.0:8761"
+
 
 
 

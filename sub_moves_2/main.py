@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import tensorflow as tf
 import keras
 
-import tensorflow_text as text
+#import tensorflow_text as text
 from fastapi.encoders import jsonable_encoder
 import json
 import numpy as np

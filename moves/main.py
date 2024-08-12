@@ -1,37 +1,51 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-import tensorflow as tf
-import keras
-
-#import tensorflow_text as text
-from fastapi.encoders import jsonable_encoder
-import json
 import numpy as np
-
-
 from py_eureka_client.eureka_client import EurekaClient
 from contextlib import asynccontextmanager
+import requests
+from services.summarizers import (
+    summarize_imrad_sentences_with_classes,
+    summarize_introduction,
+)
+
+from services.schemas.class_based_summarizer_schemas import SentenceClass
+from typing import List
+
 eureka_server_url = "http://0.0.0.0:8761"
 
+model_id_url = {
+    "moves": "http://0.0.0.0:8501/v1/models/moves:predict",
+    "sub_moves_0": "http://0.0.0.0:8501/v1/models/sub_moves_0:predict",
+    "sub_moves_1": "http://0.0.0.0:8501/v1/models/sub_moves_1:predict",
+    "sub_moves_2": "http://0.0.0.0:8501/v1/models/sub_moves_2:predict",
+}
 
 
+async def get_predictions(model_url: str, sentences: list[str] = []):
+    response = requests.post(model_url, None, {"instances": sentences})
+    print("status code -------------------------")
+    print(response.status_code)
+    if response.status_code != 200:
+        raise Exception("Error in prediction")
 
+    json = response.json()
 
+    if "predictions" not in json:
+        raise Exception("Error in prediction")
 
-print(keras.__version__)
+    predictions = json["predictions"]
+    return [
+        {"class": int(np.argmax(x)), "probability": float(np.max(x))}
+        for i, x in enumerate(predictions)
+    ]
 
-tf.get_logger().setLevel('ERROR')
-moves_classification_model_path = 'model_epoch_2'; 
-
-
-
-
-model = None
 
 @asynccontextmanager
 async def startup(app: FastAPI):
-    client = EurekaClient(eureka_server=eureka_server_url, app_name="ai_model_moves", instance_port=8000)
+    client = EurekaClient(
+        eureka_server=eureka_server_url, app_name="ai_model_moves", instance_port=8000
+    )
     await client.start()
     yield
     # Shutdown code here
@@ -40,44 +54,49 @@ async def startup(app: FastAPI):
 def on_error(err_type: str, err: Exception):
     print("----------------------------")
     print(err_type, err, sep=": ")
+
+
 app = FastAPI(lifespan=startup)
 origins = ["*"]
 methods = ["*"]
 headers = ["*"]
 
 app.add_middleware(
-    CORSMiddleware, 
-    allow_origins = origins,
-    allow_credentials = True,
-    allow_methods = methods,
-    allow_headers = headers    
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=methods,
+    allow_headers=headers,
 )
 
 # connect with eureka client
 
 
+@app.post("/summary/generate")
+async def generate_summary(introduction: str):
+    return summarize_introduction(introduction)
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-print("loading model")
-model = keras.models.load_model(moves_classification_model_path)
-print("loading model completed.......")
+@app.post("/summary/class-based/generate")
+async def generate_class_based_summary(sentences: List[SentenceClass]):
+    return summarize_imrad_sentences_with_classes(sentences)
 
 
+@app.post("/models/{id}/predict/batch")
+async def predict_batch(sentences: list[str], id: str):
+    model_url = model_id_url[id]
+    if not model_url:
+        return Exception("Model not found")
 
-@app.post("/predict/batch")
-async def predict_batch(sentences: list[str]):
     print("prediction started....")
-    predictions = model.predict(sentences)
-    # map to a list of dicts with the class and the probability
-    predictions  = [{'class':int(np.argmax(x)),'probability':float(np.max(x))} for i,x in enumerate(predictions)]
-    print(predictions)
+    predictions = await get_predictions(model_url, sentences)
 
-    return predictions 
+    # map to a list of dicts with the class and the probability
+    print(predictions)
+    return predictions
+
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

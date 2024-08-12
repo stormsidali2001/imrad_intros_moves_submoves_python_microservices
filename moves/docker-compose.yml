@@ -1,0 +1,16 @@
+version: "3"
+services:
+        sv:
+                image: tensorflow/serving:latest
+                restart: unless-stopped
+                ports:
+                  - 8500:8500
+                  - 8501:8501
+                volumes:
+                        - ./models/moves:/models/moves
+                        - ./models/sub_moves_0:/models/sub_moves_0
+                        - ./models/sub_moves_1:/models/sub_moves_1
+                        - ./models/sub_moves_2:/models/sub_moves_2
+                        - ./models/models.config:/models/models.config
+
+                command: --model_config_file=/models/models.config

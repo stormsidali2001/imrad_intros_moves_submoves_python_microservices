@@ -3,6 +3,7 @@
 ```
 
 pip install tensorflow=="2.15.0"
+pip install tensorflow-text=="2.15.0"
 pip install "tf-models-official==2.15.*"
  
 ```

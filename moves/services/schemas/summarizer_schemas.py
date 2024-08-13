@@ -1,4 +1,10 @@
 from langchain_core.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel as BaseModelV2
+
+
+class GlobalSummaryEventDto(BaseModelV2):
+    introductionId: str
+    content: str
 
 
 class Summary(BaseModel):

@@ -8,9 +8,11 @@ from services.summarizers import (
     summarize_imrad_sentences_with_classes,
     summarize_introduction,
 )
-
+from services.redis.subscribers import init_global_summary_creation_subscriber
 from services.schemas.class_based_summarizer_schemas import SentenceClass
 from typing import List
+import asyncio
+
 
 eureka_server_url = "http://0.0.0.0:8761"
 
@@ -41,12 +43,19 @@ async def get_predictions(model_url: str, sentences: list[str] = []):
     ]
 
 
+async def start_subscribers():
+    # This will run the subscriber loop in the background
+    asyncio.create_task(init_global_summary_creation_subscriber())
+
+
 @asynccontextmanager
 async def startup(app: FastAPI):
     client = EurekaClient(
         eureka_server=eureka_server_url, app_name="ai_model_moves", instance_port=8000
     )
     await client.start()
+    await start_subscribers()
+
     yield
     # Shutdown code here
 
@@ -74,11 +83,16 @@ app.add_middleware(
 
 @app.post("/summary/generate")
 async def generate_summary(introduction: str):
+    print("----------------")
+    print("introduction")
+    print(introduction)
     return summarize_introduction(introduction)
 
 
 @app.post("/summary/class-based/generate")
 async def generate_class_based_summary(sentences: List[SentenceClass]):
+    print("Invoking class based generation")
+    print(sentences)
     return summarize_imrad_sentences_with_classes(sentences)
 
 

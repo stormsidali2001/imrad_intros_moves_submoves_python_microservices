@@ -27,5 +27,5 @@ chain = prompt | model | parser
 # ) | RunnableLambda(lambda x: retry_parser.parse_with_prompt(**x))
 
 
-def summarize_sentences_with_classes(sentences: str):
+def summarize_sentences_with_classes(sentences: str) -> str:
     return chain.invoke({"sentences": sentences})

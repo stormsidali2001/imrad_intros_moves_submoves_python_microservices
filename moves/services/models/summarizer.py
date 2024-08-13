@@ -27,5 +27,5 @@ chain = prompt | model | parser
 # ) | RunnableLambda(lambda x: retry_parser.parse_with_prompt(**x))
 
 
-def summarize_introduction(introduction: str):
+def summarize_introduction(introduction: str) -> Summary:
     return chain.invoke({"introduction": introduction})

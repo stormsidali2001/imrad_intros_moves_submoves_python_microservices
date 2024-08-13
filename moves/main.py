@@ -8,7 +8,10 @@ from services.summarizers import (
     summarize_imrad_sentences_with_classes,
     summarize_introduction,
 )
-from services.redis.subscribers import init_global_summary_creation_subscriber
+from services.redis.subscribers import (
+    init_global_summary_creation_subscriber,
+    init_class_based_summary_creation_subscriber,
+)
 from services.schemas.class_based_summarizer_schemas import SentenceClass
 from typing import List
 import asyncio
@@ -46,6 +49,7 @@ async def get_predictions(model_url: str, sentences: list[str] = []):
 async def start_subscribers():
     # This will run the subscriber loop in the background
     asyncio.create_task(init_global_summary_creation_subscriber())
+    asyncio.create_task(init_class_based_summary_creation_subscriber())
 
 
 @asynccontextmanager

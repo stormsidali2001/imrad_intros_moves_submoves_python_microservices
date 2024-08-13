@@ -14,7 +14,7 @@ parser = PydanticOutputParser(pydantic_object=ClassBasedSummary)
 
 
 prompt = PromptTemplate(
-    template="Given this IMRAD introduction sentences with their corresponding classes. Summarize the author thought process.\n {sentences}\n {format_instructions}",
+    template="Given this IMRAD introduction sentences with their corresponding classes.Explain the author thought process.\n Mension the IMRAD move and submoves when switching between two different moves or submoves sections .\n {sentences}\n {format_instructions}",
     input_variables=["sentences"],
     partial_variables={"format_instructions": parser.get_format_instructions()},
 )
@@ -27,5 +27,5 @@ chain = prompt | model | parser
 # ) | RunnableLambda(lambda x: retry_parser.parse_with_prompt(**x))
 
 
-def summarize_sentences_with_classes(sentences: str) -> str:
+def summarize_sentences_with_classes(sentences: str) -> ClassBasedSummary:
     return chain.invoke({"sentences": sentences})

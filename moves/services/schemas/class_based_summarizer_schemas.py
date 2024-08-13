@@ -1,13 +1,23 @@
 from langchain_core.pydantic_v1 import BaseModel, Field
-from typing import List, Optional
 
 from pydantic import BaseModel as BaseModelV2
+from typing import List
 
 
 class SentenceClass(BaseModelV2):
     sentence: str = Field(description="The sentence text")
     move: int = Field(description="The imrad introduction move")
     subMove: int = Field(description="The imrad introduction subMove")
+
+
+class ClassBasedSummaryCreatedEventDto(BaseModelV2):
+    introductionId: str
+    content: str
+
+
+class ClassBasedSummaryEventDto(BaseModelV2):
+    introductionId: str
+    content: List[SentenceClass]
 
 
 class ClassBasedSummary(BaseModel):

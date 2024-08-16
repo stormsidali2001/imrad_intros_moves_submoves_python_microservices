@@ -22,5 +22,5 @@ class ClassBasedSummaryEventDto(BaseModelV2):
 
 class ClassBasedSummary(BaseModel):
     class_based_summary: str = Field(
-        description="A summary taking into consideration and mensioning the switching between the IMRAD introduction moves and submoves"
+        description="A summary taking into consideration and mensioning the switching between the IMRAD introduction moves and submoves. This field text should be beautifly markdown formated and easy to ready and follow.Use line breaks when switching between sections"
     )

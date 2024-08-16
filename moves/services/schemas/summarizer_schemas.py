@@ -9,7 +9,7 @@ class GlobalSummaryEventDto(BaseModelV2):
 
 class Summary(BaseModel):
     content: str = Field(
-        description="The global summary of the Imrad introduction, should not take more than 4 lines"
+        description="The global summary of the Imrad introduction.This field text should be beautifly markdown formated and easy to ready and follow."
     )
     problimatic: str = Field(
         description="The problematic which was introduced by the author"

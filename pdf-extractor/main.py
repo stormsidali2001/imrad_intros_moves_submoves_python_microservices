@@ -26,12 +26,9 @@ app = FastAPI(lifespan=startup)
 def extract_introduction(content: str) -> str:
     # Define the heuristic map for section starts
     section_map = {
-        "introduction": [
-            "INTRODUCTION",
-            #
-        ],
+        "introduction": ["INTRODUCTION", "1. Introduction"],
         "next_section": [
-            r"\d+\.\s*[A-Z][a-z]*",  # Matches patterns like "2. Overview" or "1. Methods"
+            r"\d+\.+\s*[A-Z][a-z]*",  # Matches patterns like "2. Overview" or "1. Methods"
             "METHODS",
             #
             "METHODOLOGY",
@@ -47,7 +44,6 @@ def extract_introduction(content: str) -> str:
             "CONCLUSION",
             #
             "RELATED WORK",
-            #
         ],
     }
 
@@ -62,7 +58,7 @@ def extract_introduction(content: str) -> str:
     # Search for the start of the introduction
     intro_start_match = intro_start_pattern.search(content)
     if not intro_start_match:
-        return "Introduction section not found."
+        raise Exception("Introduction not found")
 
     intro_start_index = intro_start_match.end()
     print("Start index : " + str(intro_start_index))

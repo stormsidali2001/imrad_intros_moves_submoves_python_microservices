@@ -38,16 +38,21 @@ The platform is built using a microservice architecture for scalability and main
 
 ## Datasets
 
-The AI models used in this platform are trained and evaluated on the following datasets:
+The AI models in this platform are trained on a unique dataset of over 169,000 sentences. This dataset was generated using Google's Gemini Pro model and a custom-designed pipeline applied to a set of randomly selected introductions from the **unarXive IMRaD Classification Dataset (Hugging Face):** [https://huggingface.co/datasets/saier/unarXive_imrad_clf](https://huggingface.co/datasets/saier/unarXive_imrad_clf).
 
-* **IMRAD Introduction Sentences Moves & Sub-moves Dataset:** [https://huggingface.co/datasets/stormsidali2001/IMRAD-introduction-sentences-moves-sub-moves-dataset](https://huggingface.co/datasets/stormsidali2001/IMRAD-introduction-sentences-moves-sub-moves-dataset)
-    * Contains sentences extracted from scientific research paper introductions, labeled with their corresponding IMRaD moves and sub-moves.
+The pipeline involved the following steps:
 
-* **unarXive IMRaD Classification Dataset (Hugging Face):** [https://huggingface.co/datasets/saier/unarXive_imrad_clf](https://huggingface.co/datasets/saier/unarXive_imrad_clf) 
-    * A larger dataset of IMRaD-structured papers used as a basis for creating the training data.
+1. **Introduction Selection:**  A set of introductions were randomly selected from the unarXive dataset. 
+2. **Sentence Splitting with Gemini Pro:**  Gemini Pro was used to split each selected introduction into individual sentences. 
+3. **Initial Move and Sub-move Prediction (Gemini Pro):** Gemini Pro was used to generate initial predictions for the IMRaD move and sub-move of each sentence. 
+4. **Outlier Detection:** A custom outlier detection pipeline analyzed the initial predictions, identifying and removing sentences with likely incorrect classifications. 
+5. **Data Augmentation with Gemini Pro:** For each IMRaD move label, additional sentences were generated using Gemini Pro, based on the correctly classified sentences remaining after outlier detection.
 
-* **IMRAD Classification Dataset (100k Rows):** [https://huggingface.co/datasets/stormsidali2001/IMRAD-sections-clf-gemini-augmented](https://huggingface.co/datasets/stormsidali2001/IMRAD-sections-clf-gemini-augmented) 
-    * An augmented dataset used for training and evaluating models.
+This process resulted in a final dataset of over 169,000 sentences, meticulously labeled for their respective IMRaD moves and sub-moves.
+
+**Dataset Generation Notebooks:**
+
+The notebooks used to create this dataset can be found in the `/notebooks` directory of this repository. 
 
 **Trained Models:**
 

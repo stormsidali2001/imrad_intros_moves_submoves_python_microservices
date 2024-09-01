@@ -73,40 +73,39 @@ The trained TensorFlow models are published on Hugging Face:
 
 **App Screens:**
 
-* admin_dashboard_page.png
-* admin_subscriptions_page.png
-* admin_users_page.png
-* app_screens_introduction_details_normal_user.png
-* app_screens_introduction_details_premium_user.png
-* billing_portal_1.png
-* billing_portal_2.png
-* dashboard_error_page.png
-* error_page.png
-* feedbacks_state_1.png
-* forgot_password_state_1.png
-* forgot_password_state_2.png
-* generate_state_1.png
-* generate_state_2.png
-* generate_state_3.png
-* generate_state_4_loading.png
-* generate_state_5.png
-* introductions_page.png
-* loading_page.png
-* login.png
-* reset_password_callback_page_state_1.png
-* reset_password_callback_page_state_2.png
-* settings_1.png
-* settings_2.png
-* sign_up_state_1.png
-* sign_up_state_2.png
-* submit_feedback_dislike.png
-* submit_feedback_like.png
-* upgrade_plan_screens_1.png
-* upgrade_plan_screens_2_stripe_checkout.png
-* upgrade_plan_screens_3_premium_user.png
-* verify_email_page_1.png
-* verify_email_page_2.png
-
+* [Admin Dashboard](./app_screens/admin_dashboard_page.png)
+* [Admin Subscriptions](./app_screens/admin_subscriptions_page.png)
+* [Admin Users](./app_screens/admin_users_page.png)
+* [Introduction Details (Normal User)](./app_screens/app_screens_introduction_details_normal_user.png)
+* [Introduction Details (Premium User)](./app_screens/app_screens_introduction_details_premium_user.png)
+* [Billing Portal 1](./app_screens/billing_portal_1.png)
+* [Billing Portal 2](./app_screens/billing_portal_2.png)
+* [Dashboard Error Page](./app_screens/dashboard_error_page.png)
+* [General Error Page](./app_screens/error_page.png)
+* [Feedbacks](./app_screens/feedbacks_state_1.png)
+* [Forgot Password Form](./app_screens/forgot_password_state_1.png)
+* [Forgot Password Success](./app_screens/forgot_password_state_2.png)
+* [Generate (Initial State)](./app_screens/generate_state_1.png)
+* [Generate (Introduction Input)](./app_screens/generate_state_2.png)
+* [Generate (Sentence List)](./app_screens/generate_state_3.png)
+* [Generate (Loading)](./app_screens/generate_state_4_loading.png)
+* [Generate (Analysis Results)](./app_screens/generate_state_5.png)
+* [Introductions List](./app_screens/introductions_page.png)
+* [Loading Page](./app_screens/loading_page.png)
+* [Login](./app_screens/login.png)
+* [Reset Password Form](./app_screens/reset_password_callback_page_state_1.png)
+* [Reset Password Success](./app_screens/reset_password_callback_page_state_2.png)
+* [Settings Part 1](./app_screens/settings_1.png)
+* [Settings Part 2](./app_screens/settings_2.png)
+* [Registration Form](./app_screens/sign_up_state_1.png)
+* [Registration Form (State 2)](./app_screens/sign_up_state_2.png)
+* [Submit Feedback (Dislike)](./app_screens/submit_feedback_dislike.png)
+* [Submit Feedback (Like)](./app_screens/submit_feedback_like.png)
+* [Plans Page](./app_screens/upgrade_plan_screens_1.png)
+* [Stripe Checkout](./app_screens/upgrade_plan_screens_2_stripe_checkout.png)
+* [Premium User](./app_screens/upgrade_plan_screens_3_premium_user.png)
+* [Verify Email (Pending)](./app_screens/verify_email_page_1.png)
+* [Verify Email (Success)](./app_screens/verify_email_page_2.png)
 
 ## Getting Started
 

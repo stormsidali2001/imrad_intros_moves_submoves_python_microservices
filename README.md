@@ -42,7 +42,7 @@ TensorFlow Serving is used to efficiently serve the AI models for prediction.  T
 
 * `/moves`: Contains the code for the AI Models Microservice (FastAPI).
 * `/pdf-extractor`: Contains the code for the PDF Extractor Microservice (FastAPI).
-* `/tensorflow-serving`:  Contains the Docker Compose configuration for TensorFlow Serving. 
+* `/tensorflow-models`:  Contains the Docker Compose configuration for TensorFlow Serving. 
 
 ## Dependencies 
 

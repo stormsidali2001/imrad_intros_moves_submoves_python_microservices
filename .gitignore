@@ -2,6 +2,7 @@
 !**.py
 !**.md
 !**.yml
+!requirements.txt
 !**.config
 !.gitignore
 !jjrequirements.txt

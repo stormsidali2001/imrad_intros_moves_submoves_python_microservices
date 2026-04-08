@@ -46,14 +46,51 @@ TensorFlow Serving is used to efficiently serve the AI models for prediction.  T
 
 ## Dependencies 
 
-* Python 3.9+
+* Python 3.13 (recommended)
 * FastAPI
 * TensorFlow
 * Docker
 
 ## Running the Microservices
 
-later
+### Prerequisites
+1. Ensure you have **Docker** and **Python 3.13** installed.
+2. Recreate the virtual environment and install the necessary Python dependencies:
+   ```bash
+   python3.13 -m venv .venv
+   source .venv/bin/activate
+   pip install -r moves/requirements.txt
+   pip install python-multipart
+   ```
+3. Ensure a **Eureka Server** is running at `http://localhost:8761`.
+
+### 1. Start TensorFlow Serving
+The AI models are served using TensorFlow Serving. Navigate to the `tensorflow-models` directory and start the container:
+
+```bash
+cd tensorflow-models
+docker-compose up -d
+```
+
+### 2. Start AI Models Microservice (Moves)
+This service handles IMRaD move classification and summarization.
+
+```bash
+source .venv/bin/activate
+cd moves
+uvicorn main:app --reload --port 8000
+```
+*The service will be available at `http://localhost:8000`.*
+
+### 3. Start PDF Extractor Microservice
+This service extracts text from PDF research papers.
+
+```bash
+source .venv/bin/activate
+cd pdf-extractor
+uvicorn main:app --reload --port 8010
+```
+*The service will be available at `http://localhost:8010`.*
 ## License
 
 MIT

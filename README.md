@@ -1,4 +1,11 @@
 
+> **ARCHIVED** — This repository has been superseded by the unified Turborepo monorepo.
+> All code (moves classifier, pdf-extractor, Eureka service, Next.js frontend, and user-data API)
+> now lives in one place:
+> **[stormsidali2001/graduation_IMRAD_introduction_analysis_SaaS](https://github.com/stormsidali2001/graduation_IMRAD_introduction_analysis_SaaS)**
+>
+> This repo is kept for reference. No further development will happen here.
+
 # IMRaD Introduction Analysis - AI Models and PDF Extractor Microservices 
 
 This repository contains the backend microservices responsible for the core AI-powered analysis and PDF processing functionality of the IMRaD Introduction Analysis platform. This platform is developed as part of my graduation thesis. 
